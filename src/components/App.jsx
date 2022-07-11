@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import ContactForm from "./ContactForm/ContactForm";
+import ContactList from "./ContactList/ContactList";
 import { nanoid } from 'nanoid';
 
 class App extends Component {
@@ -14,26 +15,23 @@ class App extends Component {
   };
   addContact = ({ name, number }) => {
 
-
     const contact = {
       id: nanoid(),
       name,
       number,
     };
-
     this.setState(prevState => {
       return {
-        contacts: [
-          {
-            id: nanoid(),
-            ...contact,
-          },
-          ...prevState.contacts,
-        ],
+        contacts: [contact, ...prevState.contacts],
       };
     });
-
   }
+  deleteContact = (id) => {
+    this.setState(prevState => ({
+      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    }))
+  }
+
   render() {
     console.log(this.state);
     return (
@@ -41,7 +39,10 @@ class App extends Component {
         <ContactForm onSubmit={this.addContact} />
         <h2>Contacts</h2>
         Filter
-        ContactList </div>
+        <ContactList
+          contacts={this.state.contacts}
+          onDeleteContact={this.deleteContact}
+        /> </div>
 
     );
 

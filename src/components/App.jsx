@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import ContactForm from "./ContactForm/ContactForm";
 import ContactList from "./ContactList/ContactList";
 import { nanoid } from 'nanoid';
+import Filter from './Filter/Filter';
 
 class App extends Component {
   state = {
@@ -11,38 +12,63 @@ class App extends Component {
       { id: 'id-3', name: 'Eden Clements', number: '645-17-79' },
       { id: 'id-4', name: 'Annie Copeland', number: '227-91-26' },
     ],
-
+    filter: '',
   };
   addContact = ({ name, number }) => {
-
+    const { contacts } = this.state;
     const contact = {
       id: nanoid(),
       name,
       number,
     };
-    this.setState(prevState => {
-      return {
-        contacts: [contact, ...prevState.contacts],
-      };
-    });
+
+    contacts.some(
+      contact => contact.name.toLowerCase() === name.toLowerCase()
+    ) ?
+      (alert(`${name} is already in contacts`)) :
+      (this.setState(({ contacts }) => {
+        return {
+          contacts: [contact, ...contacts],
+        };
+      })
+      )
   }
+
   deleteContact = (id) => {
-    this.setState(prevState => ({
-      contacts: prevState.contacts.filter(contact => contact.id !== id),
+    this.setState(({ contacts }) => ({
+      contacts: contacts.filter(contact => contact.id !== id),
     }))
+  }
+
+  changeFilter = (e) => {
+    this.setState({ filter: e.currentTarget.value })
   }
 
   render() {
     console.log(this.state);
+    const { contacts, filter } = this.state;
+
+    const normalizedFilter = filter.toLowerCase();
+    const vizibleContacts = contacts.filter(contact => contact.name.toLowerCase().includes(normalizedFilter));
+
+
     return (
       <div> <h1>Phonebook</h1>
-        <ContactForm onSubmit={this.addContact} />
+        <ContactForm
+          onSubmit={this.addContact} />
         <h2>Contacts</h2>
-        Filter
+
+        <Filter
+          filterValue={filter}
+          onChangeFilter={this.changeFilter}
+        />
+
         <ContactList
-          contacts={this.state.contacts}
+          contacts={vizibleContacts}
           onDeleteContact={this.deleteContact}
-        /> </div>
+        />
+
+      </div>
 
     );
 

@@ -1,4 +1,5 @@
 import ContactItem from 'components/ContactItem/ContactItem';
+import PropTypes from 'prop-types';
 
 const ContactList = ({ contacts, onDeleteContact }) => {
     return (
@@ -10,17 +11,18 @@ const ContactList = ({ contacts, onDeleteContact }) => {
                         number={number}
                         onDeleteContact={() => onDeleteContact(id)}
                     />
-                    {/* {`${contact.name}: ${contact.number}`}
-                    <button
-                        onClick={() => onDeleteContact(contact.id)}
-                        type="button"
-                    >
-                        Delete
-                    </button> */}
+
                 </li>
             ))}
         </ul>
     );
 };
 
+ContactList.propTypes = {
+    contacts: PropTypes.arrayOf(
+        PropTypes.shape({
+            id: PropTypes.string.isRequired,
+        })
+    ),
+};
 export default ContactList;

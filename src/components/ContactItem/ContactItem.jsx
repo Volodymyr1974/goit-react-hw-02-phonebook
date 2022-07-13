@@ -1,8 +1,11 @@
+import PropTypes from 'prop-types';
+import style from './ContactItem.module.css';
+
 const ContactItem = ({ name, number, onDeleteContact }) => {
     return (
-        <div>
-            {`${name}: ${number}`}
-            <button
+        <div className={style.item}>
+            {`${name} :  ${number}`}
+            <button className={style.item_button}
                 onClick={onDeleteContact}
                 type="button"
             >
@@ -12,5 +15,10 @@ const ContactItem = ({ name, number, onDeleteContact }) => {
 
 
     )
+};
+ContactItem.propTypes = {
+    name: PropTypes.string.isRequired,
+    number: PropTypes.string.isRequired,
+    onDeleteContact: PropTypes.func.isRequired,
 };
 export default ContactItem;
